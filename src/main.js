@@ -59,15 +59,6 @@ const voteLoader = document.getElementById('vote-loader');
 const voteTitleRef = document.getElementById('vote-title-ref');
 const toast = document.getElementById('toast');
 
-// PWA Install Prompt elements
-const installPrompt = document.getElementById('install-prompt');
-const installActionBtn = document.getElementById('install-action-btn');
-const installCloseBtn = document.getElementById('install-close-btn');
-const installMsg = document.getElementById('install-msg');
-
-let deferredPrompt = null;
-
-// ---- STATE ----
 let currentUser = null;
 let tapasData = [];
 let userVotes = [];
@@ -169,9 +160,6 @@ const showDashboard = async () => {
   renderGrid();
   checkRankingStatus();
   setupRealtime();
-  
-  // Try to show PWA Install Prompt after a delay
-  setTimeout(checkAndShowInstallPrompt, 8000); 
 };
 
 const setupRealtime = () => {
@@ -691,57 +679,6 @@ saveRankingBtn.addEventListener('click', async () => {
     checkRankingStatus();
   }
 });
-
-// ---- PWA INSTALL LOGIC ----
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-function isIos() {
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /iphone|ipad|ipod/.test(userAgent);
-}
-
-function isInStandaloneMode() {
-  return ('standalone' in window.navigator) || (window.matchMedia('(display-mode: standalone)').matches);
-}
-
-function checkAndShowInstallPrompt() {
-  if (!installPrompt) return;
-  if (sessionStorage.getItem('pwa_prompt_dismissed')) return;
-  if (!currentUser) return; // Only show if logged in
-  if (isInStandaloneMode()) return;
-
-  console.log('Checking PWA prompt...', { isIos: isIos(), deferredPrompt: !!deferredPrompt });
-
-  if (isIos()) {
-    if (installActionBtn) installActionBtn.style.display = 'none';
-    if (installMsg) installMsg.innerHTML = 'Pulsa <strong style="color:var(--accent-color)">Compartir</strong> y luego <strong style="color:var(--accent-color)">Añadir a pantalla de inicio</strong>.';
-    installPrompt.classList.add('active');
-  } else if (deferredPrompt) {
-    if (installActionBtn) installActionBtn.style.display = 'block';
-    installPrompt.classList.add('active');
-  }
-}
-
-if (installCloseBtn) {
-  installCloseBtn.addEventListener('click', () => {
-    installPrompt.classList.remove('active');
-    sessionStorage.setItem('pwa_prompt_dismissed', 'true');
-  });
-}
-
-if (installActionBtn) {
-  installActionBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-    installPrompt.classList.remove('active');
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`PWA Install outcome: ${outcome}`);
-    deferredPrompt = null;
-  });
-}
 
 // Boot
 init();
