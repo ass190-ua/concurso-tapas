@@ -708,32 +708,40 @@ function isInStandaloneMode() {
 }
 
 function checkAndShowInstallPrompt() {
+  if (!installPrompt) return;
   if (sessionStorage.getItem('pwa_prompt_dismissed')) return;
+  if (!currentUser) return; // Only show if logged in
   if (isInStandaloneMode()) return;
 
+  console.log('Checking PWA prompt...', { isIos: isIos(), deferredPrompt: !!deferredPrompt });
+
   if (isIos()) {
-    installActionBtn.style.display = 'none';
-    installMsg.innerHTML = 'Pulsa <strong style="color:var(--accent-color)">Compartir</strong> y luego <strong style="color:var(--accent-color)">Añadir a pantalla de inicio</strong>.';
+    if (installActionBtn) installActionBtn.style.display = 'none';
+    if (installMsg) installMsg.innerHTML = 'Pulsa <strong style="color:var(--accent-color)">Compartir</strong> y luego <strong style="color:var(--accent-color)">Añadir a pantalla de inicio</strong>.';
     installPrompt.classList.add('active');
   } else if (deferredPrompt) {
-    installActionBtn.style.display = 'block';
+    if (installActionBtn) installActionBtn.style.display = 'block';
     installPrompt.classList.add('active');
   }
 }
 
-installCloseBtn.addEventListener('click', () => {
-  installPrompt.classList.remove('active');
-  sessionStorage.setItem('pwa_prompt_dismissed', 'true');
-});
+if (installCloseBtn) {
+  installCloseBtn.addEventListener('click', () => {
+    installPrompt.classList.remove('active');
+    sessionStorage.setItem('pwa_prompt_dismissed', 'true');
+  });
+}
 
-installActionBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  installPrompt.classList.remove('active');
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  console.log(`PWA Install outcome: ${outcome}`);
-  deferredPrompt = null;
-});
+if (installActionBtn) {
+  installActionBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    installPrompt.classList.remove('active');
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`PWA Install outcome: ${outcome}`);
+    deferredPrompt = null;
+  });
+}
 
 // Boot
 init();
