@@ -17,13 +17,20 @@ export const loginUser = async (username, password) => {
   if (error) return { error };
   if (!data) return { error: { message: 'Usuario no encontrado' }};
   
-  if (data.event_password === password) {
-    // Guarda la sesión en local
-    localStorage.setItem('tapas_user', JSON.stringify(data));
-    return { data };
-  } else {
+  const isMamaAri = username === 'Mamá de Ari';
+  const mamaAriPass = 'TdR2026_Secret_M_Ari_#7!';
+
+  if (isMamaAri) {
+    if (password !== mamaAriPass) {
+      return { error: { message: 'Este usuario requiere una contraseña de seguridad especial.' } };
+    }
+  } else if (data.event_password !== password) {
     return { error: { message: 'Contraseña del evento incorrecta' }};
   }
+
+  // Guarda la sesión en local
+  localStorage.setItem('tapas_user', JSON.stringify(data));
+  return { data };
 };
 
 export const logoutUser = () => {

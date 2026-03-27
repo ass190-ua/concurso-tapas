@@ -239,19 +239,57 @@ const renderConsensus = () => {
     .map(t => ({ ...t, totalPoints: pointMap[t.id] }))
     .sort((a, b) => b.totalPoints - a.totalPoints);
 
-  sortedConsensus.forEach((tapa, index) => {
-    const item = document.createElement('div');
-    item.className = 'consensus-item';
-    item.innerHTML = `
-      <div class="ranking-index" style="background: ${index === 0 ? 'var(--gold-color)' : 'var(--accent-color)'}">
-        ${index + 1}
+  // Create Podium (Top 3)
+  const top3 = sortedConsensus.slice(0, 3);
+  const podium = document.createElement('div');
+  podium.className = 'podium';
+  
+  // Custom order for podium: 2nd, 1st, 3rd
+  const podiumOrder = [
+    { rank: 2, tapa: top3[1], class: 'second' },
+    { rank: 1, tapa: top3[0], class: 'first' },
+    { rank: 3, tapa: top3[2], class: 'third' }
+  ];
+
+  podiumOrder.forEach(p => {
+    if (!p.tapa) return;
+    const place = document.createElement('div');
+    place.className = `podium-place ${p.class}`;
+    place.innerHTML = `
+      <div class="podium-avatar">
+        <img src="${p.tapa.photo_url}">
+        <div class="podium-badge">${p.rank}</div>
       </div>
-      <img class="ranking-img" src="${tapa.photo_url}">
-      <div class="ranking-title">${tapa.title}</div>
-      <div class="consensus-points">${tapa.totalPoints} pts</div>
+      <div class="podium-step">
+        <div class="podium-points">${p.tapa.totalPoints}</div>
+        <div class="podium-name">${p.tapa.username}</div>
+      </div>
     `;
-    consensusContainer.appendChild(item);
+    podium.appendChild(place);
   });
+
+  consensusContainer.appendChild(podium);
+
+  // Create List for the rest
+  const list = document.createElement('div');
+  list.className = 'consensus-list-refined';
+  
+  sortedConsensus.slice(3).forEach((tapa, index) => {
+    const row = document.createElement('div');
+    row.className = 'consensus-row';
+    row.style.animationDelay = `${(index + 1) * 0.1}s`;
+    row.innerHTML = `
+      <div class="row-rank">#${index + 4}</div>
+      <img class="row-img" src="${tapa.photo_url}">
+      <div class="row-info">
+        <div class="row-name">${tapa.title}</div>
+        <div class="row-points">De ${tapa.username} • ${tapa.totalPoints} pts</div>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+
+  consensusContainer.appendChild(list);
 };
 
 const loadRankings = async () => {

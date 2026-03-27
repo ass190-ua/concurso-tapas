@@ -59,7 +59,7 @@ INSERT INTO users (username, event_password) VALUES
 ('Brian', 'tapas26'),
 ('Araceli', 'tapas26'),
 ('Ari', 'tapas26'),
-('Mamá de Ari', 'tapas26'),
+('Mamá de Ari', 'TdR2026_Secret_M_Ari_#7!'),
 ('Paula', 'tapas26'),
 ('Samu', 'tapas26');
 
