@@ -685,3 +685,94 @@ p { font-size: 15px; line-height: 1.5; color: #555;}
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+/* PWA Install Prompt */
+.install-prompt {
+  position: fixed;
+  bottom: 85px; /* Above the nav bar */
+  left: 16px;
+  right: 16px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  z-index: 1000;
+  padding: 16px;
+  transform: translateY(150%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(128, 27, 46, 0.1);
+}
+
+.install-prompt.active {
+  transform: translateY(0);
+}
+
+.install-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.install-icon {
+  width: 45px;
+  height: 45px;
+  background: var(--bg-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.install-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.install-text {
+  flex: 1;
+}
+
+.install-text h3 {
+  font-size: 14px;
+  margin: 0;
+  text-align: left;
+  color: var(--accent-color);
+}
+
+.install-text p {
+  font-size: 11px;
+  color: #666;
+  margin: 2px 0 0 0;
+}
+
+.btn-mini {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.install-close {
+  position: absolute;
+  top: -24px;
+  right: -8px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+

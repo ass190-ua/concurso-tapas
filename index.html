@@ -139,10 +139,22 @@
       <!-- Injected via JS -->
     </div>
     
-    <button class="btn" id="save-ranking-btn" style="margin-top: 20px; background: var(--gold-color);">
-      <span>GUARDAR RANKING FINAL</span>
-      <div class="loader" id="ranking-loader"></div>
     </button>
+  </div>
+
+  <!-- PWA INSTALL PROMPT -->
+  <div id="install-prompt" class="install-prompt">
+    <div class="install-content">
+      <div class="install-icon">
+        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7V9H5V2H3V9c0 2.12 1.66 3.84 3.75 3.97V22h1.5V13C10.34 12.84 12 11.12 12 9V2H10V9zm5-7v16h2V11c0 0 3-1.49 3-5V2c-4.12 0-5 4-5 4z"/></svg>
+      </div>
+      <div class="install-text">
+        <h3>¡Instala la App!</h3>
+        <p id="install-msg">Añádela a tu pantalla de inicio para votar más rápido.</p>
+      </div>
+      <button class="btn-mini" id="install-action-btn">INSTALAR</button>
+      <button class="install-close" id="install-close-btn">&times;</button>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>
